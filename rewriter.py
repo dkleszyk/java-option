@@ -23,6 +23,7 @@
 # THE SOFTWARE.
 
 import sys
+
 sys.path.append("krakatau")
 
 from os import remove
@@ -32,16 +33,26 @@ from disassemble import disassembleSub
 from assemble import assembleClass
 from Krakatau.script_util import makeWriter
 
+
 def disassemble(classname, classpath="", asmpath=None):
     nameparts = classname.split(".")
     packagepath, name = join(*nameparts[:-1]), nameparts[-1]
     readdir = join(classpath, packagepath)
     writedir = asmpath if asmpath is not None else readdir
+
     def readFile(filename):
         with open(join(readdir, filename), "rb") as f:
             return f.read()
+
     with makeWriter(writedir, ".j") as out:
-        disassembleSub(readFile, out, targets=[name + ".class"], roundtrip=False, outputClassName=False)
+        disassembleSub(
+            readFile,
+            out,
+            targets=[name + ".class"],
+            roundtrip=False,
+            outputClassName=False,
+        )
+
 
 def assemble(classname, asmpath="", classpath=None):
     readdir = asmpath
@@ -52,6 +63,7 @@ def assemble(classname, asmpath="", classpath=None):
             filename = out.write(name, data)
             print("Class written to", filename)
 
+
 types = (
     # u/c name, l/c name, boxed type, primitive type, type code
     ("Boolean", "boolean", "Boolean", "boolean", "Z"),
@@ -61,7 +73,7 @@ types = (
     ("Float", "float", "Float", "float", "F"),
     ("Int", "int", "Integer", "int", "I"),
     ("Long", "long", "Long", "long", "J"),
-    ("Short", "short", "Short", "short", "S")
+    ("Short", "short", "Short", "short", "S"),
 )
 
 basepath = abspath(".")
@@ -81,19 +93,71 @@ for u in (t[0] for t in types):
     with open(asmfile, "r") as f:
         lines = f.read().split("\n")
 
-    implStartIdx = next((idx for idx, line in enumerate(lines) if line.startswith(".method public orElse :")))
-    implEndIdx = next((idx for idx, line in enumerate(lines) if idx > implStartIdx and line == ".end method "))
-    implLineNoIdx = next((idx for idx, line in enumerate(lines) if idx > implStartIdx and idx < implEndIdx and line.startswith("            L0 ")))
-    implArgIdx = next((idx for idx, line in enumerate(lines) if idx > implStartIdx and idx < implEndIdx and line.startswith("            1 is value")))
-    bridgeStartIdx = next((idx for idx, line in enumerate(lines) if line.startswith(".method public bridge synthetic orElse :")))
-    bridgeEndIdx = next((idx for idx, line in enumerate(lines) if idx > bridgeStartIdx and line == ".end method "))
-    bridgeLineNoIdx = next((idx for idx, line in enumerate(lines) if idx > bridgeStartIdx and idx < bridgeEndIdx and line.startswith("            L0 ")))
+    implStartIdx = next(
+        (
+            idx
+            for idx, line in enumerate(lines)
+            if line.startswith(".method public orElse :")
+        )
+    )
+    implEndIdx = next(
+        (
+            idx
+            for idx, line in enumerate(lines)
+            if idx > implStartIdx and line == ".end method "
+        )
+    )
+    implLineNoIdx = next(
+        (
+            idx
+            for idx, line in enumerate(lines)
+            if idx > implStartIdx
+            and idx < implEndIdx
+            and line.startswith("            L0 ")
+        )
+    )
+    implArgIdx = next(
+        (
+            idx
+            for idx, line in enumerate(lines)
+            if idx > implStartIdx
+            and idx < implEndIdx
+            and line.startswith("            1 is value")
+        )
+    )
+    bridgeStartIdx = next(
+        (
+            idx
+            for idx, line in enumerate(lines)
+            if line.startswith(".method public bridge synthetic orElse :")
+        )
+    )
+    bridgeEndIdx = next(
+        (
+            idx
+            for idx, line in enumerate(lines)
+            if idx > bridgeStartIdx and line == ".end method "
+        )
+    )
+    bridgeLineNoIdx = next(
+        (
+            idx
+            for idx, line in enumerate(lines)
+            if idx > bridgeStartIdx
+            and idx < bridgeEndIdx
+            and line.startswith("            L0 ")
+        )
+    )
 
-    impl = lines[(implStartIdx + 1):(implEndIdx - 1)]
+    impl = lines[(implStartIdx + 1) : (implEndIdx - 1)]
     impl[implLineNoIdx - (implStartIdx + 1)] = lines[bridgeLineNoIdx]
-    impl[implArgIdx - (implStartIdx + 1)] = sub(r"^( +1 is value L).+(; from L\d+ to L\d+ )$", r"\1java/lang/Object\2", impl[implArgIdx - (implStartIdx + 1)])
+    impl[implArgIdx - (implStartIdx + 1)] = sub(
+        r"^( +1 is value L).+(; from L\d+ to L\d+ )$",
+        r"\1java/lang/Object\2",
+        impl[implArgIdx - (implStartIdx + 1)],
+    )
 
-    lines = lines[:(bridgeStartIdx + 1)] + impl + lines[(bridgeEndIdx - 1):]
+    lines = lines[: (bridgeStartIdx + 1)] + impl + lines[(bridgeEndIdx - 1) :]
     with open(asmfile, "w") as f:
         f.write("\n".join(lines))
     assemble(cls, asmpath, classpath)
@@ -117,7 +181,9 @@ for u in [""] + [t[0] for t in types]:
             method.append(line)
             if line == ".end method ":
                 decl = method[0]
-                sig = next((line for line in method if line.startswith("    .signature ")), "")
+                sig = next(
+                    (line for line in method if line.startswith("    .signature ")), ""
+                )
                 if u:
                     sig = sig.replace("<T:", "<U:").replace("TT;", "TU;")
                 elif not ("(TT;" in sig or ";TT;" in sig or ")TT;" in sig):
@@ -139,17 +205,46 @@ with open(asmfile, "r") as f:
     lines = f.read().split("\n")
 
 # Add interface impls
-ifaceIdx = 1 + next((idx for idx, line in enumerate(lines) if line == ".implements me/dkleszyk/java/option/Option "))
-lines = lines[:ifaceIdx] + [".implements me/dkleszyk/java/option/" + u + "Option " for u in (t[0] for t in types)] + lines[ifaceIdx:]
+ifaceIdx = 1 + next(
+    (
+        idx
+        for idx, line in enumerate(lines)
+        if line == ".implements me/dkleszyk/java/option/Option "
+    )
+)
+lines = (
+    lines[:ifaceIdx]
+    + [
+        ".implements me/dkleszyk/java/option/" + u + "Option "
+        for u in (t[0] for t in types)
+    ]
+    + lines[ifaceIdx:]
+)
 sigIdx = next((idx for idx, line in enumerate(lines) if line.startswith(".signature ")))
 sig = lines[sigIdx]
 sigopt = ";Lme/dkleszyk/java/option/Option<TT;>;"
-sig = sig.replace(sigopt, sigopt + ";".join(["Lme/dkleszyk/java/option/" + u + "Option" for u in [t[0] for t in types]]) + ";")
+sig = sig.replace(
+    sigopt,
+    sigopt
+    + ";".join(
+        ["Lme/dkleszyk/java/option/" + u + "Option" for u in [t[0] for t in types]]
+    )
+    + ";",
+)
 lines[sigIdx] = sig
 
 # Get lineno for class
 with open(join(*([srcpath] + cls.split("."))) + ".java", "r") as f:
-    lineno = str(1 + next((idx for idx, line in enumerate(f.read().split("\n")) if line == "final class None<T>")))
+    lineno = str(
+        1
+        + next(
+            (
+                idx
+                for idx, line in enumerate(f.read().split("\n"))
+                if line == "final class None<T>"
+            )
+        )
+    )
 
 # Add bridge methods
 bridges = []
@@ -158,14 +253,24 @@ for decl, sig in methods:
     ridx = decl.rfind(")")
     xidx = -1
     # 24 ::= len(".method public abstract ")
-    declstart, declname, declargs, declret, declend = (decl[:24], decl[24:(aidx-4)], decl[aidx:ridx], decl[(ridx+1):xidx], decl[xidx:])
+    declstart, declname, declargs, declret, declend = (
+        decl[:24],
+        decl[24 : (aidx - 4)],
+        decl[aidx:ridx],
+        decl[(ridx + 1) : xidx],
+        decl[xidx:],
+    )
 
     aidx = sig.find("(") + 1
     ridx = sig.rfind(")")
     xidx = sig.rfind("^")
     if xidx == -1 and sig.endswith("' "):
         xidx = -2
-    sigstart, sigargs, sigret, sigend = (sig[:(aidx-1)], sig[aidx:ridx], sig[(ridx+1):xidx], sig[xidx:]) if sig else ("", "", "", "")
+    sigstart, sigargs, sigret, sigend = (
+        (sig[: (aidx - 1)], sig[aidx:ridx], sig[(ridx + 1) : xidx], sig[xidx:])
+        if sig
+        else ("", "", "", "")
+    )
 
     declarglist = []
     i = 0
@@ -208,12 +313,18 @@ for decl, sig in methods:
         i = j
 
     origsig = sig
-    for b in [t[2] for t in types] if sigret == "TT;" or "TT;" in sigarglist else [("")]:
+    for b in (
+        [t[2] for t in types] if sigret == "TT;" or "TT;" in sigarglist else [("")]
+    ):
         sig = origsig
         bridgedtype = "Ljava/lang/" + b + ";"
         # Only need ACC_BRIDGE for methods with covariant return type
         # and invariant parameter types
-        decl = declstart.replace(" abstract ", " bridge synthetic ") if sigret == "TT;" and "TT;" not in sigarglist else declstart.replace(" abstract ", " synthetic ")
+        decl = (
+            declstart.replace(" abstract ", " bridge synthetic ")
+            if sigret == "TT;" and "TT;" not in sigarglist
+            else declstart.replace(" abstract ", " synthetic ")
+        )
         decl += declname + " : ("
         if not sig:
             for a in declarglist:
@@ -263,14 +374,18 @@ for decl, sig in methods:
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L4 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
                 elif declname.startswith("toOptional"):
                     ret = declret[1:-1]
                     method += [
                         "    .code stack 1 locals 1 ",
-                        "L0:     invokestatic Method " + ret + " empty ()L" + ret + "; ",
+                        "L0:     invokestatic Method "
+                        + ret
+                        + " empty ()L"
+                        + ret
+                        + "; ",
                         "L3:     areturn ",
                         "L4:     ",
                         "        .linenumbertable ",
@@ -282,14 +397,18 @@ for decl, sig in methods:
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L4 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
                 elif declname.endswith("Stream"):
                     ret = declret[1:-1]
                     method += [
                         "    .code stack 1 locals 1 ",
-                        "L0:     invokestatic InterfaceMethod " + ret + " empty ()L" + ret + "; ",
+                        "L0:     invokestatic InterfaceMethod "
+                        + ret
+                        + " empty ()L"
+                        + ret
+                        + "; ",
                         "L3:     areturn ",
                         "L4:     ",
                         "        .linenumbertable ",
@@ -301,7 +420,7 @@ for decl, sig in methods:
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L4 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname.endswith("ElseThrow"):
@@ -325,7 +444,7 @@ for decl, sig in methods:
                         "            1 is supplier Ljava/util/function/Supplier<+TX;>; from L0 to L10 ",
                         "        .end localvariabletypetable ",
                         "    .end code ",
-                        "    .exceptions java/lang/Throwable "
+                        "    .exceptions java/lang/Throwable ",
                     ]
                     break
                 elif argc == 2:
@@ -351,7 +470,7 @@ for decl, sig in methods:
                         "            2 is arg TA; from L0 to L11 ",
                         "        .end localvariabletypetable ",
                         "    .end code ",
-                        "    .exceptions java/lang/Throwable "
+                        "    .exceptions java/lang/Throwable ",
                     ]
                     break
             elif declname == "or":
@@ -372,7 +491,7 @@ for decl, sig in methods:
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L2 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname.startswith("orGet"):
@@ -394,9 +513,11 @@ for decl, sig in methods:
                         "        .end localvariabletable ",
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L10 ",
-                        "            1 is supplier Ljava/util/function/Supplier<+L" + ret + ";>; from L0 to L10 ",
+                        "            1 is supplier Ljava/util/function/Supplier<+L"
+                        + ret
+                        + ";>; from L0 to L10 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
                 elif argc == 2:
@@ -419,10 +540,12 @@ for decl, sig in methods:
                         "        .end localvariabletable ",
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L11 ",
-                        "            1 is supplier Ljava/util/function/Function<-TA;+L" + ret + ";>; from L0 to L11 ",
+                        "            1 is supplier Ljava/util/function/Function<-TA;+L"
+                        + ret
+                        + ";>; from L0 to L11 ",
                         "            2 is arg TA; from L0 to L11 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname == "orElse":
@@ -441,7 +564,7 @@ for decl, sig in methods:
                     "        .localvariabletypetable ",
                     "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L2 ",
                     "        .end localvariabletypetable ",
-                    "    .end code "
+                    "    .end code ",
                 ]
                 break
             elif declname == "orElseGet":
@@ -462,9 +585,11 @@ for decl, sig in methods:
                         "        .end localvariabletable ",
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L10 ",
-                        "            1 is supplier Ljava/util/function/Supplier<+" + bridgedtype + ">; from L0 to L10 ",
+                        "            1 is supplier Ljava/util/function/Supplier<+"
+                        + bridgedtype
+                        + ">; from L0 to L10 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
                 elif argc == 2:
@@ -486,10 +611,12 @@ for decl, sig in methods:
                         "        .end localvariabletable ",
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L11 ",
-                        "            1 is supplier Ljava/util/function/Function<-TA;+" + bridgedtype + ">; from L0 to L11 ",
+                        "            1 is supplier Ljava/util/function/Function<-TA;+"
+                        + bridgedtype
+                        + ">; from L0 to L11 ",
                         "            2 is arg TA; from L0 to L11 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname.startswith("filter"):
@@ -512,7 +639,7 @@ for decl, sig in methods:
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L5 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname.startswith("matches"):
@@ -533,7 +660,7 @@ for decl, sig in methods:
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L2 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname.startswith("ifSome"):
@@ -542,7 +669,9 @@ for decl, sig in methods:
                     tcsmr = "/" + u + "Consumer;"
                     objtcsmr = "/Obj" + u + "Consumer;"
                     if argc == 2:
-                        if declarglist[0].endswith(tcsmr) and declarglist[1].endswith("/Runnable;"):
+                        if declarglist[0].endswith(tcsmr) and declarglist[1].endswith(
+                            "/Runnable;"
+                        ):
                             ifsome = declarglist[0][1:-1]
                             method += [
                                 "    .code stack 2 locals 3 ",
@@ -556,17 +685,23 @@ for decl, sig in methods:
                                 "        .end linenumbertable ",
                                 "        .localvariabletable ",
                                 "            0 is this Lme/dkleszyk/java/option/None; from L0 to L6 ",
-                                "            1 is ifSome L" + ifsome + "; from L0 to L6 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "; from L0 to L6 ",
                                 "            2 is ifNone Ljava/lang/Runnable; from L0 to L6 ",
                                 "        .end localvariabletable ",
                                 "        .localvariabletypetable ",
                                 "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L6 ",
                                 "        .end localvariabletypetable ",
-                                "    .end code "
+                                "    .end code ",
                             ]
                             break
                     elif argc == 3:
-                        if declarglist[0].endswith(objtcsmr) and declarglist[1].endswith("/Object;") and declarglist[2].endswith("/Runnable;"):
+                        if (
+                            declarglist[0].endswith(objtcsmr)
+                            and declarglist[1].endswith("/Object;")
+                            and declarglist[2].endswith("/Runnable;")
+                        ):
                             ifsome = declarglist[0][1:-1]
                             method += [
                                 "    .code stack 2 locals 4 ",
@@ -580,19 +715,27 @@ for decl, sig in methods:
                                 "        .end linenumbertable ",
                                 "        .localvariabletable ",
                                 "            0 is this Lme/dkleszyk/java/option/None; from L0 to L6 ",
-                                "            1 is ifSome L" + ifsome + "; from L0 to L6 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "; from L0 to L6 ",
                                 "            2 is ifSomeArg Ljava/lang/Object; from L0 to L6 ",
                                 "            3 is ifNone Ljava/lang/Runnable; from L0 to L6 ",
                                 "        .end localvariabletable ",
                                 "        .localvariabletypetable ",
                                 "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L6 ",
-                                "            1 is ifSome L" + ifsome + "<-TA;>; from L0 to L6 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "<-TA;>; from L0 to L6 ",
                                 "            2 is ifSomeArg TA; from L0 to L6 ",
                                 "        .end localvariabletypetable ",
-                                "    .end code "
+                                "    .end code ",
                             ]
                             break
-                        elif declarglist[0].endswith(tcsmr) and declarglist[1].endswith("/Consumer;") and declarglist[2].endswith("/Object;"):
+                        elif (
+                            declarglist[0].endswith(tcsmr)
+                            and declarglist[1].endswith("/Consumer;")
+                            and declarglist[2].endswith("/Object;")
+                        ):
                             ifsome = declarglist[0][1:-1]
                             method += [
                                 "    .code stack 3 locals 4 ",
@@ -607,7 +750,9 @@ for decl, sig in methods:
                                 "        .end linenumbertable ",
                                 "        .localvariabletable ",
                                 "            0 is this Lme/dkleszyk/java/option/None; from L0 to L7 ",
-                                "            1 is ifSome L" + ifsome + "; from L0 to L7 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "; from L0 to L7 ",
                                 "            2 is ifNone Ljava/util/function/Consumer; from L0 to L7 ",
                                 "            3 is ifNoneArg Ljava/lang/Object; from L0 to L7 ",
                                 "        .end localvariabletable ",
@@ -616,10 +761,14 @@ for decl, sig in methods:
                                 "            2 is ifNone Ljava/util/function/Consumer<-TA;>; from L0 to L7 ",
                                 "            3 is ifNoneArg TA; from L0 to L7 ",
                                 "        .end localvariabletypetable ",
-                                "    .end code "
+                                "    .end code ",
                             ]
                             break
-                        elif declarglist[0].endswith(objtcsmr) and declarglist[1].endswith("/Consumer;") and declarglist[2].endswith("/Object;"):
+                        elif (
+                            declarglist[0].endswith(objtcsmr)
+                            and declarglist[1].endswith("/Consumer;")
+                            and declarglist[2].endswith("/Object;")
+                        ):
                             ifsome = declarglist[0][1:-1]
                             method += [
                                 "    .code stack 3 locals 4 ",
@@ -634,21 +783,30 @@ for decl, sig in methods:
                                 "        .end linenumbertable ",
                                 "        .localvariabletable ",
                                 "            0 is this Lme/dkleszyk/java/option/None; from L0 to L7 ",
-                                "            1 is ifSome L" + ifsome + "; from L0 to L7 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "; from L0 to L7 ",
                                 "            2 is ifNone Ljava/util/function/Consumer; from L0 to L7 ",
                                 "            3 is arg Ljava/lang/Object; from L0 to L7 ",
                                 "        .end localvariabletable ",
                                 "        .localvariabletypetable ",
                                 "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L7 ",
-                                "            1 is ifSome L" + ifsome + "<-TA;>; from L0 to L7 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "<-TA;>; from L0 to L7 ",
                                 "            2 is ifNone Ljava/util/function/Consumer<-TA;>; from L0 to L7 ",
                                 "            3 is arg TA; from L0 to L7 ",
                                 "        .end localvariabletypetable ",
-                                "    .end code "
+                                "    .end code ",
                             ]
                             break
                     elif argc == 4:
-                        if declarglist[0].endswith(objtcsmr) and declarglist[1].endswith("/Object;") and declarglist[2].endswith("/Consumer;") and declarglist[3].endswith("/Object;"):
+                        if (
+                            declarglist[0].endswith(objtcsmr)
+                            and declarglist[1].endswith("/Object;")
+                            and declarglist[2].endswith("/Consumer;")
+                            and declarglist[3].endswith("/Object;")
+                        ):
                             ifsome = declarglist[0][1:-1]
                             method += [
                                 "    .code stack 3 locals 5 ",
@@ -663,19 +821,23 @@ for decl, sig in methods:
                                 "        .end linenumbertable ",
                                 "        .localvariabletable ",
                                 "            0 is this Lme/dkleszyk/java/option/None; from L0 to L8 ",
-                                "            1 is ifSome L" + ifsome + "; from L0 to L8 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "; from L0 to L8 ",
                                 "            2 is ifSomeArg Ljava/lang/Object; from L0 to L8 ",
                                 "            3 is ifNone Ljava/util/function/Consumer; from L0 to L8 ",
                                 "            4 is ifNoneArg Ljava/lang/Object; from L0 to L8 ",
                                 "        .end localvariabletable ",
                                 "        .localvariabletypetable ",
                                 "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L8 ",
-                                "            1 is ifSome L" + ifsome + "<-TA;>; from L0 to L8 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "<-TA;>; from L0 to L8 ",
                                 "            2 is ifSomeArg TA; from L0 to L8 ",
                                 "            3 is ifNone Ljava/util/function/Consumer<-TB;>; from L0 to L8 ",
                                 "            4 is ifNoneArg TB; from L0 to L8 ",
                                 "        .end localvariabletypetable ",
-                                "    .end code "
+                                "    .end code ",
                             ]
                             break
                 else:
@@ -694,16 +856,20 @@ for decl, sig in methods:
                                 "        .end linenumbertable ",
                                 "        .localvariabletable ",
                                 "            0 is this Lme/dkleszyk/java/option/None; from L0 to L1 ",
-                                "            1 is ifSome L" + ifsome + "; from L0 to L1 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "; from L0 to L1 ",
                                 "        .end localvariabletable ",
                                 "        .localvariabletypetable ",
                                 "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L1 ",
                                 "        .end localvariabletypetable ",
-                                "    .end code "
+                                "    .end code ",
                             ]
                             break
-                    elif argc == 2 :
-                        if declarglist[0].endswith(objtcsmr) and declarglist[1].endswith("/Object;"):
+                    elif argc == 2:
+                        if declarglist[0].endswith(objtcsmr) and declarglist[
+                            1
+                        ].endswith("/Object;"):
                             ifsome = declarglist[0][1:-1]
                             method += [
                                 "    .code stack 1 locals 3 ",
@@ -714,31 +880,33 @@ for decl, sig in methods:
                                 "        .end linenumbertable ",
                                 "        .localvariabletable ",
                                 "            0 is this Lme/dkleszyk/java/option/None; from L0 to L1 ",
-                                "            1 is ifSome L" + ifsome + "; from L0 to L1 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "; from L0 to L1 ",
                                 "            2 is arg Ljava/lang/Object; from L0 to L1 ",
                                 "        .end localvariabletable ",
                                 "        .localvariabletypetable ",
                                 "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L1 ",
-                                "            1 is ifSome L" + ifsome + "<-TA;>; from L0 to L1 ",
+                                "            1 is ifSome L"
+                                + ifsome
+                                + "<-TA;>; from L0 to L1 ",
                                 "            2 is arg TA; from L0 to L1 ",
                                 "        .end localvariabletypetable ",
-                                "    .end code "
+                                "    .end code ",
                             ]
                             break
             elif declname.endswith("OrElse"):
                 lt = declname[:-6]
                 c = next((c for _, l, _, _, c in types if l == lt))
-                method += ["    .code stack 2 locals 3 "] if c == "D" or c == "J" else ["    .code stack 1 locals 2 "]
+                method += (
+                    ["    .code stack 2 locals 3 "]
+                    if c == "D" or c == "J"
+                    else ["    .code stack 1 locals 2 "]
+                )
                 if c == "D":
-                    method += [
-                        "L0:     dload_1 ",
-                        "L1:     dreturn "
-                    ]
+                    method += ["L0:     dload_1 ", "L1:     dreturn "]
                 elif c == "J":
-                    method += [
-                        "L0:     lload_1 ",
-                        "L1:     lreturn "
-                    ]
+                    method += ["L0:     lload_1 ", "L1:     lreturn "]
                 elif c == "F":
                     method += [
                         "L0:     fload_1 ",
@@ -761,7 +929,7 @@ for decl, sig in methods:
                     "        .localvariabletypetable ",
                     "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L2 ",
                     "        .end localvariabletypetable ",
-                    "    .end code "
+                    "    .end code ",
                 ]
                 break
             elif declname.endswith("OrElseGet"):
@@ -770,19 +938,25 @@ for decl, sig in methods:
                 supp = declarglist[0][1:-1]
                 if argc == 1:
                     get = "getAs" + u
-                    method += ["    .code stack 2 locals 3 "] if c == "D" or c == "J" else ["    .code stack 1 locals 2 "]
+                    method += (
+                        ["    .code stack 2 locals 3 "]
+                        if c == "D" or c == "J"
+                        else ["    .code stack 1 locals 2 "]
+                    )
                     method += [
                         "L0:     aload_1 ",
-                        "L1:     invokeinterface InterfaceMethod " + supp + " " + get + " ()" + c + " 1 "
+                        "L1:     invokeinterface InterfaceMethod "
+                        + supp
+                        + " "
+                        + get
+                        + " ()"
+                        + c
+                        + " 1 ",
                     ]
                     if c == "D":
-                        method += [
-                            "L6:     dreturn "
-                        ]
+                        method += ["L6:     dreturn "]
                     elif c == "J":
-                        method += [
-                            "L6:     lreturn "
-                        ]
+                        method += ["L6:     lreturn "]
                     elif c == "F":
                         method += [
                             "L6:     freturn ",
@@ -803,25 +977,31 @@ for decl, sig in methods:
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L7 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
                 elif argc == 2:
                     get = "applyAs" + u if u != "Boolean" else "test"
-                    method += ["    .code stack 3 locals 4 "] if c == "D" or c == "J" else ["    .code stack 2 locals 3 "]
+                    method += (
+                        ["    .code stack 3 locals 4 "]
+                        if c == "D" or c == "J"
+                        else ["    .code stack 2 locals 3 "]
+                    )
                     method += [
                         "L0:     aload_1 ",
                         "L1:     aload_2 ",
-                        "L2:     invokeinterface InterfaceMethod " + supp + " " + get + " (Ljava/lang/Object;)" + c + " 2 "
+                        "L2:     invokeinterface InterfaceMethod "
+                        + supp
+                        + " "
+                        + get
+                        + " (Ljava/lang/Object;)"
+                        + c
+                        + " 2 ",
                     ]
                     if c == "D":
-                        method += [
-                            "L7:     dreturn "
-                        ]
+                        method += ["L7:     dreturn "]
                     elif c == "J":
-                        method += [
-                            "L7:     lreturn "
-                        ]
+                        method += ["L7:     lreturn "]
                     elif c == "F":
                         method += [
                             "L7:     freturn ",
@@ -845,7 +1025,7 @@ for decl, sig in methods:
                         "            1 is supplier L" + supp + "<-TA;>; from L0 to L8 ",
                         "            2 is arg TA; from L0 to L8 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname.startswith("map"):
@@ -869,14 +1049,18 @@ for decl, sig in methods:
                             "        .localvariabletypetable ",
                             "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L7 ",
                             "        .end localvariabletypetable ",
-                            "    .end code "
+                            "    .end code ",
                         ]
                         break
                     elif argc == 2:
                         map = declarglist[0][1:-1]
                         ret = declret[1:-1]
                         c = declarglist[1]
-                        method += ["    .code stack 1 locals 4 "] if c == "D" or c == "J" else ["    .code stack 1 locals 3 "]
+                        method += (
+                            ["    .code stack 1 locals 4 "]
+                            if c == "D" or c == "J"
+                            else ["    .code stack 1 locals 3 "]
+                        )
                         method += [
                             "L0:     invokestatic Method me/dkleszyk/java/option/Options noneUnchecked ()Lme/dkleszyk/java/option/Option; ",
                             "L3:     checkcast " + ret + " ",
@@ -893,7 +1077,7 @@ for decl, sig in methods:
                             "        .localvariabletypetable ",
                             "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L7 ",
                             "        .end localvariabletypetable ",
-                            "    .end code "
+                            "    .end code ",
                         ]
                         break
                 elif argc == 1:
@@ -914,7 +1098,7 @@ for decl, sig in methods:
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L4 ",
                         "            1 is mapper L" + map + "<+TU;>; from L0 to L4 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             elif declname.startswith("flatMap"):
@@ -937,9 +1121,13 @@ for decl, sig in methods:
                             "        .end localvariabletable ",
                             "        .localvariabletypetable ",
                             "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L7 ",
-                            "            1 is mapper L" + map + "<+" + ret + ";>; from L0 to L7 ",
+                            "            1 is mapper L"
+                            + map
+                            + "<+"
+                            + ret
+                            + ";>; from L0 to L7 ",
                             "        .end localvariabletypetable ",
-                            "    .end code "
+                            "    .end code ",
                         ]
                         break
                 elif argc == 1:
@@ -958,9 +1146,11 @@ for decl, sig in methods:
                         "        .end localvariabletable ",
                         "        .localvariabletypetable ",
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L4 ",
-                        "            1 is mapper L" + map + "<+Lme/dkleszyk/java/option/Option<+TU;>;>; from L0 to L4 ",
+                        "            1 is mapper L"
+                        + map
+                        + "<+Lme/dkleszyk/java/option/Option<+TU;>;>; from L0 to L4 ",
                         "        .end localvariabletypetable ",
-                        "    .end code "
+                        "    .end code ",
                     ]
                     break
             raise NameError("\n".join((decl, sig)))
