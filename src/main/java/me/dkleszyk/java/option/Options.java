@@ -34,6 +34,12 @@ final class Options
     {
     }
 
+    public static <T_OPTN extends Option<?>> T_OPTN noneChecked(
+        final Class<T_OPTN> optionType)
+    {
+        return optionType.cast(None.INSTANCE);
+    }
+
     public static <T_OPTN extends Option<?>> T_OPTN noneUnchecked()
     {
         @SuppressWarnings("unchecked")
