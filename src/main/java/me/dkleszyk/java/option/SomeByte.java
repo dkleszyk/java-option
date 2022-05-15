@@ -429,66 +429,8 @@ final class SomeByte
     }
 
     @Override
-    public <T> Option<T> flatMapByte(
-        ByteFunction<? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(value);
-        return o;
-    }
-
-    @Override
-    public BooleanOption flatMapByteToBoolean(
-        final ByteFunction<? extends BooleanOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ByteOption flatMapByteToByte(
-        final ByteFunction<? extends ByteOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public CharOption flatMapByteToChar(
-        final ByteFunction<? extends CharOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public DoubleOption flatMapByteToDouble(
-        final ByteFunction<? extends DoubleOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public FloatOption flatMapByteToFloat(
-        final ByteFunction<? extends FloatOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public IntOption flatMapByteToInt(
-        final ByteFunction<? extends IntOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public LongOption flatMapByteToLong(
-        final ByteFunction<? extends LongOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ShortOption flatMapByteToShort(
-        final ByteFunction<? extends ShortOption> mapper)
+    public <O extends Option<?>> O flatMapByte(
+        final ByteFunction<? extends O> mapper)
     {
         return mapper.apply(value);
     }

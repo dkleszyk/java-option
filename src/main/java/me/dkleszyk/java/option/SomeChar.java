@@ -451,66 +451,8 @@ final class SomeChar
     }
 
     @Override
-    public <T> Option<T> flatMapChar(
-        final CharFunction<? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(value);
-        return o;
-    }
-
-    @Override
-    public BooleanOption flatMapCharToBoolean(
-        final CharFunction<? extends BooleanOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ByteOption flatMapCharToByte(
-        final CharFunction<? extends ByteOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public CharOption flatMapCharToChar(
-        final CharFunction<? extends CharOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public DoubleOption flatMapCharToDouble(
-        final CharFunction<? extends DoubleOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public FloatOption flatMapCharToFloat(
-        final CharFunction<? extends FloatOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public IntOption flatMapCharToInt(
-        final CharFunction<? extends IntOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public LongOption flatMapCharToLong(
-        final CharFunction<? extends LongOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ShortOption flatMapCharToShort(
-        final CharFunction<? extends ShortOption> mapper)
+    public <O extends Option<?>> O flatMapChar(
+        final CharFunction<? extends O> mapper)
     {
         return mapper.apply(value);
     }

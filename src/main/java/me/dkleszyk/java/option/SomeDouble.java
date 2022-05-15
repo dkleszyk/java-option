@@ -459,66 +459,8 @@ final class SomeDouble
     }
 
     @Override
-    public <T> Option<T> flatMapDouble(
-        final DoubleFunction<? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(value);
-        return o;
-    }
-
-    @Override
-    public BooleanOption flatMapDoubleToBoolean(
-        final DoubleFunction<? extends BooleanOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ByteOption flatMapDoubleToByte(
-        final DoubleFunction<? extends ByteOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public CharOption flatMapDoubleToChar(
-        final DoubleFunction<? extends CharOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public DoubleOption flatMapDoubleToDouble(
-        final DoubleFunction<? extends DoubleOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public FloatOption flatMapDoubleToFloat(
-        final DoubleFunction<? extends FloatOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public IntOption flatMapDoubleToInt(
-        final DoubleFunction<? extends IntOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public LongOption flatMapDoubleToLong(
-        final DoubleFunction<? extends LongOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ShortOption flatMapDoubleToShort(
-        final DoubleFunction<? extends ShortOption> mapper)
+    public <O extends Option<?>> O flatMapDouble(
+        final DoubleFunction<? extends O> mapper)
     {
         return mapper.apply(value);
     }

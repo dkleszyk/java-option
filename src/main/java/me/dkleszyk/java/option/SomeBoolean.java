@@ -436,66 +436,8 @@ final class SomeBoolean
     }
 
     @Override
-    public <T> Option<T> flatMapBoolean(
-        final BooleanFunction<? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(value);
-        return o;
-    }
-
-    @Override
-    public BooleanOption flatMapBooleanToBoolean(
-        final BooleanFunction<? extends BooleanOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ByteOption flatMapBooleanToByte(
-        final BooleanFunction<? extends ByteOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public CharOption flatMapBooleanToChar(
-        final BooleanFunction<? extends CharOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public DoubleOption flatMapBooleanToDouble(
-        final BooleanFunction<? extends DoubleOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public FloatOption flatMapBooleanToFloat(
-        final BooleanFunction<? extends FloatOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public IntOption flatMapBooleanToInt(
-        final BooleanFunction<? extends IntOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public LongOption flatMapBooleanToLong(
-        final BooleanFunction<? extends LongOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ShortOption flatMapBooleanToShort(
-        final BooleanFunction<? extends ShortOption> mapper)
+    public <O extends Option<?>> O flatMapBoolean(
+        final BooleanFunction<? extends O> mapper)
     {
         return mapper.apply(value);
     }

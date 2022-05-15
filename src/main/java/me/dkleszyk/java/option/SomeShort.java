@@ -408,66 +408,8 @@ final class SomeShort
     }
 
     @Override
-    public <T> Option<T> flatMapShort(
-        final ShortFunction<? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(value);
-        return o;
-    }
-
-    @Override
-    public BooleanOption flatMapShortToBoolean(
-        final ShortFunction<? extends BooleanOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ByteOption flatMapShortToByte(
-        final ShortFunction<? extends ByteOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public CharOption flatMapShortToChar(
-        final ShortFunction<? extends CharOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public DoubleOption flatMapShortToDouble(
-        final ShortFunction<? extends DoubleOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public FloatOption flatMapShortToFloat(
-        final ShortFunction<? extends FloatOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public IntOption flatMapShortToInt(
-        final ShortFunction<? extends IntOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public LongOption flatMapShortToLong(
-        final ShortFunction<? extends LongOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ShortOption flatMapShortToShort(
-        final ShortFunction<? extends ShortOption> mapper)
+    public <O extends Option<?>> O flatMapShort(
+        final ShortFunction<? extends O> mapper)
     {
         return mapper.apply(value);
     }

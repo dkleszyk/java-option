@@ -410,66 +410,8 @@ final class SomeLong
     }
 
     @Override
-    public <T> Option<T> flatMapLong(
-        final LongFunction<? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(value);
-        return o;
-    }
-
-    @Override
-    public BooleanOption flatMapLongToBoolean(
-        final LongFunction<? extends BooleanOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ByteOption flatMapLongToByte(
-        final LongFunction<? extends ByteOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public CharOption flatMapLongToChar(
-        final LongFunction<? extends CharOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public DoubleOption flatMapLongToDouble(
-        final LongFunction<? extends DoubleOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public FloatOption flatMapLongToFloat(
-        final LongFunction<? extends FloatOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public IntOption flatMapLongToInt(
-        final LongFunction<? extends IntOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public LongOption flatMapLongToLong(
-        final LongFunction<? extends LongOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ShortOption flatMapLongToShort(
-        final LongFunction<? extends ShortOption> mapper)
+    public <O extends Option<?>> O flatMapLong(
+        final LongFunction<? extends O> mapper)
     {
         return mapper.apply(value);
     }
