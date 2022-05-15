@@ -1106,35 +1106,7 @@ for origdecl, origsig in methods:
                     ]
                     break
             elif declname.startswith("flatMap"):
-                if "To" in declname:
-                    if argc == 1:
-                        map = declarglist[0][1:-1]
-                        ret = declret[1:-1]
-                        method += [
-                            "    .code stack 1 locals 2 ",
-                            "L0:     invokestatic Method me/dkleszyk/java/option/Options noneUnchecked ()Lme/dkleszyk/java/option/Option; ",
-                            "L3:     checkcast " + ret + " ",
-                            "L6:     areturn ",
-                            "L7:     ",
-                            "        .linenumbertable ",
-                            "            L0 " + lineno + " ",
-                            "        .end linenumbertable ",
-                            "        .localvariabletable ",
-                            "            0 is this Lme/dkleszyk/java/option/None; from L0 to L7 ",
-                            "            1 is mapper L" + map + "; from L0 to L7 ",
-                            "        .end localvariabletable ",
-                            "        .localvariabletypetable ",
-                            "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L7 ",
-                            "            1 is mapper L"
-                            + map
-                            + "<+"
-                            + ret
-                            + ";>; from L0 to L7 ",
-                            "        .end localvariabletypetable ",
-                            "    .end code ",
-                        ]
-                        break
-                elif argc == 1:
+                if argc == 1:
                     map = declarglist[0][1:-1]
                     method += [
                         "    .code stack 1 locals 2 ",
@@ -1152,7 +1124,7 @@ for origdecl, origsig in methods:
                         "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L4 ",
                         "            1 is mapper L"
                         + map
-                        + "<+Lme/dkleszyk/java/option/Option<+TU;>;>; from L0 to L4 ",
+                        + "<+TO;>; from L0 to L4 ",
                         "        .end localvariabletypetable ",
                         "    .end code ",
                     ]
