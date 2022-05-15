@@ -1086,15 +1086,15 @@ public interface Option<T>
      * Applies the specified mapper function to the contained value to create a
      * new option.
      *
-     * @param <U>    The value type of the returned option.
+     * @param <O>    The type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      *
      * @return The result of applying the mapper function if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    <U> Option<U> flatMap(
-        final Function<? super T, ? extends Option<? extends U>> mapper);
+    <O extends Option<?>> O flatMap(
+        final Function<? super T, ? extends O> mapper);
 
     /**
      * Applies the specified mapper function to the contained value to create a
@@ -1102,7 +1102,7 @@ public interface Option<T>
      *
      * @param <A>    The type of the additional argument provided to
      *               {@code mapper}.
-     * @param <U>    The value type of the returned option.
+     * @param <O>    The type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      * @param arg    An additional argument to provide to {@code mapper}.
@@ -1110,248 +1110,8 @@ public interface Option<T>
      * @return The result of applying the mapper function if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    <A, U> Option<U> flatMap(
-        final BiFunction<? super A, ? super T, ? extends Option<? extends U>> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    BooleanOption flatMapToBoolean(
-        final Function<? super T, ? extends BooleanOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> BooleanOption flatMapToBoolean(
-        final BiFunction<? super A, ? super T, ? extends BooleanOption> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ByteOption flatMapToByte(
-        final Function<? super T, ? extends ByteOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> ByteOption flatMapToByte(
-        final BiFunction<? super A, ? super T, ? extends ByteOption> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    CharOption flatMapToChar(
-        final Function<? super T, ? extends CharOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> CharOption flatMapToChar(
-        final BiFunction<? super A, ? super T, ? extends CharOption> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    DoubleOption flatMapToDouble(
-        final Function<? super T, ? extends DoubleOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> DoubleOption flatMapToDouble(
-        final BiFunction<? super A, ? super T, ? extends DoubleOption> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    FloatOption flatMapToFloat(
-        final Function<? super T, ? extends FloatOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> FloatOption flatMapToFloat(
-        final BiFunction<? super A, ? super T, ? extends FloatOption> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    IntOption flatMapToInt(
-        final Function<? super T, ? extends IntOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> IntOption flatMapToInt(
-        final BiFunction<? super A, ? super T, ? extends IntOption> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    LongOption flatMapToLong(
-        final Function<? super T, ? extends LongOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> LongOption flatMapToLong(
-        final BiFunction<? super A, ? super T, ? extends LongOption> mapper,
-        final A arg);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ShortOption flatMapToShort(
-        final Function<? super T, ? extends ShortOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <A>    The type of the additional argument provided to
-     *               {@code mapper}.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     * @param arg    An additional argument to provide to {@code mapper}.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> ShortOption flatMapToShort(
-        final BiFunction<? super A, ? super T, ? extends ShortOption> mapper,
+    <A, O extends Option<?>> O flatMap(
+        final BiFunction<? super A, ? super T, ? extends O> mapper,
         final A arg);
 
     /**
