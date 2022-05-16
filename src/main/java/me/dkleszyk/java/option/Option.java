@@ -701,9 +701,9 @@ public interface Option<T>
      * Returns the option supplied by the specified method if this instance is
      * non-empty; otherwise returns an empty option.
      *
-     * @param <A>      The value type of the returned option.
-     * @param <U>      The type of the additional argument provided to
+     * @param <A>      The type of the additional argument provided to
      *                 {@code supplier}.
+     * @param <U>      The value type of the returned option.
      * @param supplier A method that supplies the option to return if this
      *                 instance is non-empty.
      * @param arg      An additional argument to provide to {@code supplier}.
@@ -1100,9 +1100,9 @@ public interface Option<T>
      * Applies the specified mapper function to the contained value to create a
      * new option.
      *
-     * @param <A>    The value type of the returned option.
-     * @param <U>    The type of the additional argument provided to
+     * @param <A>    The type of the additional argument provided to
      *               {@code mapper}.
+     * @param <U>    The value type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      * @param arg    An additional argument to provide to {@code mapper}.
@@ -1511,9 +1511,9 @@ public interface Option<T>
     /**
      * Applies the specified mapper function to the contained value.
      *
-     * @param <A>    The value type of the returned option.
-     * @param <U>    The type of the additional argument provided to
+     * @param <A>    The type of the additional argument provided to
      *               {@code mapper}.
+     * @param <U>    The value type of the returned option.
      * @param mapper A function to apply to the value contained by this
      *               instance.
      * @param arg    An additional argument to provide to {@code mapper}.
