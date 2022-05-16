@@ -427,6 +427,26 @@ for origdecl, origsig in methods:
                         "    .end code ",
                     ]
                     break
+                elif declname == "filterToObject":
+                    ret = declret[1:-1]
+                    method += [
+                        "    .code stack 1 locals 1 ",
+                        "L0:     invokestatic Method me/dkleszyk/java/option/Options noneUnchecked ()Lme/dkleszyk/java/option/Option; ",
+                        "L3:     checkcast " + ret + " ",
+                        "L4:     areturn ",
+                        "L5:     ",
+                        "        .linenumbertable ",
+                        "            L0 " + lineno + " ",
+                        "        .end linenumbertable ",
+                        "        .localvariabletable ",
+                        "            0 is this Lme/dkleszyk/java/option/None; from L0 to L5 ",
+                        "        .end localvariabletable ",
+                        "        .localvariabletypetable ",
+                        "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L5 ",
+                        "        .end localvariabletypetable ",
+                        "    .end code ",
+                    ]
+                    break
             elif declname.endswith("ElseThrow"):
                 if argc == 1:
                     method += [
@@ -619,6 +639,57 @@ for origdecl, origsig in methods:
                         + bridgedtype
                         + ">; from L0 to L11 ",
                         "            2 is arg TA; from L0 to L11 ",
+                        "        .end localvariabletypetable ",
+                        "    .end code ",
+                    ]
+                    break
+            elif declname == "filter":
+                if argc == 1:
+                    ret = declret[1:-1]
+                    method += [
+                        "    .code stack 1 locals 2 ",
+                        "L0:     invokestatic Method me/dkleszyk/java/option/Options noneUnchecked ()Lme/dkleszyk/java/option/Option; ",
+                        "L3:     checkcast " + ret + " ",
+                        "L4:     areturn ",
+                        "L5:     ",
+                        "        .linenumbertable ",
+                        "            L0 " + lineno + " ",
+                        "        .end linenumbertable ",
+                        "        .localvariabletable ",
+                        "            0 is this Lme/dkleszyk/java/option/None; from L0 to L5 ",
+                        "            1 is predicate Ljava/util/function/Predicate; from L0 to L5 ",
+                        "        .end localvariabletable ",
+                        "        .localvariabletypetable ",
+                        "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L5 ",
+                        "            1 is predicate Ljava/util/function/Predicate<-"
+                        + bridgedtype
+                        + ">; from L0 to L5 ",
+                        "        .end localvariabletypetable ",
+                        "    .end code ",
+                    ]
+                    break
+                elif argc == 2:
+                    ret = declret[1:-1]
+                    method += [
+                        "    .code stack 1 locals 3 ",
+                        "L0:     invokestatic Method me/dkleszyk/java/option/Options noneUnchecked ()Lme/dkleszyk/java/option/Option; ",
+                        "L3:     checkcast " + ret + " ",
+                        "L4:     areturn ",
+                        "L5:     ",
+                        "        .linenumbertable ",
+                        "            L0 " + lineno + " ",
+                        "        .end linenumbertable ",
+                        "        .localvariabletable ",
+                        "            0 is this Lme/dkleszyk/java/option/None; from L0 to L5 ",
+                        "            1 is predicate Ljava/util/function/Predicate; from L0 to L5 ",
+                        "            2 is arg Ljava/lang/Object; from L0 to L5 ",
+                        "        .end localvariabletable ",
+                        "        .localvariabletypetable ",
+                        "            0 is this Lme/dkleszyk/java/option/None<TT;>; from L0 to L5 ",
+                        "            1 is predicate Ljava/util/function/Predicate<-TA;-"
+                        + bridgedtype
+                        + ">; from L0 to L5 ",
+                        "            2 is arg TA; from L0 to L5 ",
                         "        .end localvariabletypetable ",
                         "    .end code ",
                     ]
