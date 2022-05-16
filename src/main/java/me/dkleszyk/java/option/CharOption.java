@@ -126,6 +126,15 @@ public interface CharOption
         final A arg)
         throws X;
 
+    @Override
+    CharOption filter(
+        final Predicate<? super Character> predicate);
+
+    @Override
+    <A> CharOption filter(
+        final BiPredicate<? super A, ? super Character> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -139,6 +148,9 @@ public interface CharOption
      */
     CharOption filterChar(
         final CharPredicate predicate);
+
+    @Override
+    CharOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a

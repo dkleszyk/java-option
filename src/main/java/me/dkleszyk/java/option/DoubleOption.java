@@ -135,6 +135,15 @@ public interface DoubleOption
      */
     DoubleStream doubleStream();
 
+    @Override
+    DoubleOption filter(
+        final Predicate<? super Double> predicate);
+
+    @Override
+    <A> DoubleOption filter(
+        final BiPredicate<? super A, ? super Double> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -148,6 +157,9 @@ public interface DoubleOption
      */
     DoubleOption filterDouble(
         final DoublePredicate predicate);
+
+    @Override
+    DoubleOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a
