@@ -248,27 +248,32 @@ with open(join(*([srcpath] + cls.split("."))) + ".java", "r") as f:
 
 # Add bridge methods
 bridges = []
-for decl, sig in methods:
-    aidx = decl.find(" : (") + 4
-    ridx = decl.rfind(")")
+for origdecl, origsig in methods:
+    aidx = origdecl.find(" : (") + 4
+    ridx = origdecl.rfind(")")
     xidx = -1
     # 24 ::= len(".method public abstract ")
     declstart, declname, declargs, declret, declend = (
-        decl[:24],
-        decl[24 : (aidx - 4)],
-        decl[aidx:ridx],
-        decl[(ridx + 1) : xidx],
-        decl[xidx:],
+        origdecl[:24],
+        origdecl[24 : (aidx - 4)],
+        origdecl[aidx:ridx],
+        origdecl[(ridx + 1) : xidx],
+        origdecl[xidx:],
     )
 
-    aidx = sig.find("(") + 1
-    ridx = sig.rfind(")")
-    xidx = sig.rfind("^")
-    if xidx == -1 and sig.endswith("' "):
+    aidx = origsig.find("(") + 1
+    ridx = origsig.rfind(")")
+    xidx = origsig.rfind("^")
+    if xidx == -1 and origsig.endswith("' "):
         xidx = -2
     sigstart, sigargs, sigret, sigend = (
-        (sig[: (aidx - 1)], sig[aidx:ridx], sig[(ridx + 1) : xidx], sig[xidx:])
-        if sig
+        (
+            origsig[: (aidx - 1)],
+            origsig[aidx:ridx],
+            origsig[(ridx + 1) : xidx],
+            origsig[xidx:],
+        )
+        if origsig
         else ("", "", "", "")
     )
 
@@ -312,11 +317,9 @@ for decl, sig in methods:
         sigarglist.append(sigargs[i:j])
         i = j
 
-    origsig = sig
     for b in (
         [t[2] for t in types] if sigret == "TT;" or "TT;" in sigarglist else [("")]
     ):
-        sig = origsig
         bridgedtype = "Ljava/lang/" + b + ";"
         # Only need ACC_BRIDGE for methods with covariant return type
         # and invariant parameter types
@@ -326,6 +329,7 @@ for decl, sig in methods:
             else declstart.replace(" abstract ", " synthetic ")
         )
         decl += declname + " : ("
+        sig = origsig
         if not sig:
             for a in declarglist:
                 decl += a
@@ -1153,7 +1157,7 @@ for decl, sig in methods:
                         "    .end code ",
                     ]
                     break
-            raise NameError("\n".join((decl, sig)))
+            raise NameError("\n".join((origdecl, origsig, decl, sig)))
         if sig:
             method.append(sig)
         method.append(".end method ")
