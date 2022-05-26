@@ -37,6 +37,15 @@ import me.dkleszyk.java.function.extra.primitive.*;
 public interface IntOption
     extends Option<Integer>
 {
+    @Override
+    IntOption filter(
+        final Predicate<? super Integer> predicate);
+
+    @Override
+    <A> IntOption filter(
+        final BiPredicate<? super A, ? super Integer> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -51,123 +60,22 @@ public interface IntOption
     IntOption filterInt(
         final IntPredicate predicate);
 
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <T>    The value type of the returned option.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <T> Option<T> flatMapInt(
-        final IntFunction<? extends Option<? extends T>> mapper);
+    @Override
+    IntOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a
      * new option.
      *
+     * @param <O>    The type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      *
      * @return The result of applying the mapper function if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    BooleanOption flatMapIntToBoolean(
-        final IntFunction<? extends BooleanOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ByteOption flatMapIntToByte(
-        final IntFunction<? extends ByteOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    CharOption flatMapIntToChar(
-        final IntFunction<? extends CharOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    DoubleOption flatMapIntToDouble(
-        final IntFunction<? extends DoubleOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    FloatOption flatMapIntToFloat(
-        final IntFunction<? extends FloatOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    IntOption flatMapIntToInt(
-        final IntFunction<? extends IntOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    LongOption flatMapIntToLong(
-        final IntFunction<? extends LongOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ShortOption flatMapIntToShort(
-        final IntFunction<? extends ShortOption> mapper);
+    <O extends Option<?>> O flatMapInt(
+        final IntFunction<? extends O> mapper);
 
     /**
      * Returns the value contained by this instance.

@@ -135,6 +135,15 @@ public interface DoubleOption
      */
     DoubleStream doubleStream();
 
+    @Override
+    DoubleOption filter(
+        final Predicate<? super Double> predicate);
+
+    @Override
+    <A> DoubleOption filter(
+        final BiPredicate<? super A, ? super Double> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -149,123 +158,22 @@ public interface DoubleOption
     DoubleOption filterDouble(
         final DoublePredicate predicate);
 
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <T>    The value type of the returned option.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <T> Option<T> flatMapDouble(
-        final DoubleFunction<? extends Option<? extends T>> mapper);
+    @Override
+    DoubleOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a
      * new option.
      *
+     * @param <O>    The type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      *
      * @return The result of applying the mapper function if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    BooleanOption flatMapDoubleToBoolean(
-        final DoubleFunction<? extends BooleanOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ByteOption flatMapDoubleToByte(
-        final DoubleFunction<? extends ByteOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    CharOption flatMapDoubleToChar(
-        final DoubleFunction<? extends CharOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    DoubleOption flatMapDoubleToDouble(
-        final DoubleFunction<? extends DoubleOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    FloatOption flatMapDoubleToFloat(
-        final DoubleFunction<? extends FloatOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    IntOption flatMapDoubleToInt(
-        final DoubleFunction<? extends IntOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    LongOption flatMapDoubleToLong(
-        final DoubleFunction<? extends LongOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ShortOption flatMapDoubleToShort(
-        final DoubleFunction<? extends ShortOption> mapper);
+    <O extends Option<?>> O flatMapDouble(
+        final DoubleFunction<? extends O> mapper);
 
     /**
      * Returns the value contained by this instance.

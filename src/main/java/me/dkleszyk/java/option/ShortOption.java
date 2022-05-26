@@ -35,6 +35,15 @@ import me.dkleszyk.java.function.extra.primitive.*;
 public interface ShortOption
     extends Option<Short>
 {
+    @Override
+    ShortOption filter(
+        final Predicate<? super Short> predicate);
+
+    @Override
+    <A> ShortOption filter(
+        final BiPredicate<? super A, ? super Short> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -49,123 +58,22 @@ public interface ShortOption
     ShortOption filterShort(
         final ShortPredicate predicate);
 
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <T>    The value type of the returned option.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <T> Option<T> flatMapShort(
-        final ShortFunction<? extends Option<? extends T>> mapper);
+    @Override
+    ShortOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a
      * new option.
      *
+     * @param <O>    The type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      *
      * @return The result of applying the mapper function if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    BooleanOption flatMapShortToBoolean(
-        final ShortFunction<? extends BooleanOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ByteOption flatMapShortToByte(
-        final ShortFunction<? extends ByteOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    CharOption flatMapShortToChar(
-        final ShortFunction<? extends CharOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    DoubleOption flatMapShortToDouble(
-        final ShortFunction<? extends DoubleOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    FloatOption flatMapShortToFloat(
-        final ShortFunction<? extends FloatOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    IntOption flatMapShortToInt(
-        final ShortFunction<? extends IntOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    LongOption flatMapShortToLong(
-        final ShortFunction<? extends LongOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ShortOption flatMapShortToShort(
-        final ShortFunction<? extends ShortOption> mapper);
+    <O extends Option<?>> O flatMapShort(
+        final ShortFunction<? extends O> mapper);
 
     /**
      * Returns the value contained by this instance.

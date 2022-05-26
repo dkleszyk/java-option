@@ -37,6 +37,15 @@ import me.dkleszyk.java.function.extra.primitive.*;
 public interface LongOption
     extends Option<Long>
 {
+    @Override
+    LongOption filter(
+        final Predicate<? super Long> predicate);
+
+    @Override
+    <A> LongOption filter(
+        final BiPredicate<? super A, ? super Long> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -51,123 +60,22 @@ public interface LongOption
     LongOption filterLong(
         final LongPredicate predicate);
 
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <T>    The value type of the returned option.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <T> Option<T> flatMapLong(
-        final LongFunction<? extends Option<? extends T>> mapper);
+    @Override
+    LongOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a
      * new option.
      *
+     * @param <O>    The type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      *
      * @return The result of applying the mapper function if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    BooleanOption flatMapLongToBoolean(
-        final LongFunction<? extends BooleanOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ByteOption flatMapLongToByte(
-        final LongFunction<? extends ByteOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    CharOption flatMapLongToChar(
-        final LongFunction<? extends CharOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    DoubleOption flatMapLongToDouble(
-        final LongFunction<? extends DoubleOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    FloatOption flatMapLongToFloat(
-        final LongFunction<? extends FloatOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    IntOption flatMapLongToInt(
-        final LongFunction<? extends IntOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    LongOption flatMapLongToLong(
-        final LongFunction<? extends LongOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ShortOption flatMapLongToShort(
-        final LongFunction<? extends ShortOption> mapper);
+    <O extends Option<?>> O flatMapLong(
+        final LongFunction<? extends O> mapper);
 
     /**
      * Returns the value contained by this instance.

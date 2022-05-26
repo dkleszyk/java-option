@@ -126,6 +126,15 @@ public interface BooleanOption
         final A arg)
         throws X;
 
+    @Override
+    BooleanOption filter(
+        final Predicate<? super Boolean> predicate);
+
+    @Override
+    <A> BooleanOption filter(
+        final BiPredicate<? super A, ? super Boolean> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -140,123 +149,22 @@ public interface BooleanOption
     BooleanOption filterBoolean(
         final BooleanUnaryOperator predicate);
 
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param <T>    The value type of the returned option.
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <T> Option<T> flatMapBoolean(
-        final BooleanFunction<? extends Option<? extends T>> mapper);
+    @Override
+    BooleanOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a
      * new option.
      *
+     * @param <O>    The type of the returned option.
      * @param mapper A function that creates a new option from the value
      *               contained by this instance.
      *
      * @return The result of applying the mapper function if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    BooleanOption flatMapBooleanToBoolean(
-        final BooleanFunction<? extends BooleanOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ByteOption flatMapBooleanToByte(
-        final BooleanFunction<? extends ByteOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    CharOption flatMapBooleanToChar(
-        final BooleanFunction<? extends CharOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    DoubleOption flatMapBooleanToDouble(
-        final BooleanFunction<? extends DoubleOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    FloatOption flatMapBooleanToFloat(
-        final BooleanFunction<? extends FloatOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    IntOption flatMapBooleanToInt(
-        final BooleanFunction<? extends IntOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    LongOption flatMapBooleanToLong(
-        final BooleanFunction<? extends LongOption> mapper);
-
-    /**
-     * Applies the specified mapper function to the contained value to create a
-     * new option.
-     *
-     * @param mapper A function that creates a new option from the value
-     *               contained by this instance.
-     *
-     * @return The result of applying the mapper function if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ShortOption flatMapBooleanToShort(
-        final BooleanFunction<? extends ShortOption> mapper);
+    <O extends Option<?>> O flatMapBoolean(
+        final BooleanFunction<? extends O> mapper);
 
     /**
      * Returns the value contained by this instance.
