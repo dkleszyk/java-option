@@ -37,6 +37,15 @@ import me.dkleszyk.java.function.extra.primitive.*;
 public interface IntOption
     extends Option<Integer>
 {
+    @Override
+    IntOption filter(
+        final Predicate<? super Integer> predicate);
+
+    @Override
+    <A> IntOption filter(
+        final BiPredicate<? super A, ? super Integer> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -50,6 +59,9 @@ public interface IntOption
      */
     IntOption filterInt(
         final IntPredicate predicate);
+
+    @Override
+    IntOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a

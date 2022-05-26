@@ -126,6 +126,15 @@ public interface ByteOption
         final A arg)
         throws X;
 
+    @Override
+    ByteOption filter(
+        final Predicate<? super Byte> predicate);
+
+    @Override
+    <A> ByteOption filter(
+        final BiPredicate<? super A, ? super Byte> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -139,6 +148,9 @@ public interface ByteOption
      */
     ByteOption filterByte(
         final BytePredicate predicate);
+
+    @Override
+    ByteOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a

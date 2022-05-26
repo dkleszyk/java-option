@@ -35,6 +35,15 @@ import me.dkleszyk.java.function.extra.primitive.*;
 public interface FloatOption
     extends Option<Float>
 {
+    @Override
+    FloatOption filter(
+        final Predicate<? super Float> predicate);
+
+    @Override
+    <A> FloatOption filter(
+        final BiPredicate<? super A, ? super Float> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -48,6 +57,9 @@ public interface FloatOption
      */
     FloatOption filterFloat(
         final FloatPredicate predicate);
+
+    @Override
+    FloatOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a

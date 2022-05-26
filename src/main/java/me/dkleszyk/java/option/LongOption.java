@@ -37,6 +37,15 @@ import me.dkleszyk.java.function.extra.primitive.*;
 public interface LongOption
     extends Option<Long>
 {
+    @Override
+    LongOption filter(
+        final Predicate<? super Long> predicate);
+
+    @Override
+    <A> LongOption filter(
+        final BiPredicate<? super A, ? super Long> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -50,6 +59,9 @@ public interface LongOption
      */
     LongOption filterLong(
         final LongPredicate predicate);
+
+    @Override
+    LongOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a

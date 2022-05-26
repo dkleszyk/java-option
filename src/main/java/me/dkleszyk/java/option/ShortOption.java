@@ -35,6 +35,15 @@ import me.dkleszyk.java.function.extra.primitive.*;
 public interface ShortOption
     extends Option<Short>
 {
+    @Override
+    ShortOption filter(
+        final Predicate<? super Short> predicate);
+
+    @Override
+    <A> ShortOption filter(
+        final BiPredicate<? super A, ? super Short> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -48,6 +57,9 @@ public interface ShortOption
      */
     ShortOption filterShort(
         final ShortPredicate predicate);
+
+    @Override
+    ShortOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a

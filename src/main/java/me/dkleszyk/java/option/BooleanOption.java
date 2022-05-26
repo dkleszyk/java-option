@@ -126,6 +126,15 @@ public interface BooleanOption
         final A arg)
         throws X;
 
+    @Override
+    BooleanOption filter(
+        final Predicate<? super Boolean> predicate);
+
+    @Override
+    <A> BooleanOption filter(
+        final BiPredicate<? super A, ? super Boolean> predicate,
+        final A arg);
+
     /**
      * Returns this instance if it is non-empty and the specified predicate
      * returns {@code true} for its contained value; otherwise, returns an empty
@@ -139,6 +148,9 @@ public interface BooleanOption
      */
     BooleanOption filterBoolean(
         final BooleanUnaryOperator predicate);
+
+    @Override
+    BooleanOption filterToObject();
 
     /**
      * Applies the specified mapper function to the contained value to create a
