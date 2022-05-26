@@ -213,207 +213,25 @@ final class SomeFloat
     }
 
     @Override
-    public <T> Option<T> flatMap(
-        final Function<? super Float, ? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(boxedValue());
-        return o;
-    }
-
-    @Override
-    public <A, T> Option<T> flatMap(
-        final BiFunction<? super A, ? super Float, ? extends Option<? extends T>> mapper,
-        final A arg)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(arg, boxedValue());
-        return o;
-    }
-
-    @Override
-    public <T> Option<T> flatMapFloat(
-        final FloatFunction<? extends Option<? extends T>> mapper)
-    {
-        @SuppressWarnings(value = "unchecked")
-        final Option<T> o = (Option<T>) mapper.apply(value);
-        return o;
-    }
-
-    @Override
-    public BooleanOption flatMapFloatToBoolean(
-        final FloatFunction<? extends BooleanOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ByteOption flatMapFloatToByte(
-        final FloatFunction<? extends ByteOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public CharOption flatMapFloatToChar(
-        final FloatFunction<? extends CharOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public DoubleOption flatMapFloatToDouble(
-        final FloatFunction<? extends DoubleOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public FloatOption flatMapFloatToFloat(
-        final FloatFunction<? extends FloatOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public IntOption flatMapFloatToInt(
-        final FloatFunction<? extends IntOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public LongOption flatMapFloatToLong(
-        final FloatFunction<? extends LongOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public ShortOption flatMapFloatToShort(
-        final FloatFunction<? extends ShortOption> mapper)
-    {
-        return mapper.apply(value);
-    }
-
-    @Override
-    public BooleanOption flatMapToBoolean(
-        final Function<? super Float, ? extends BooleanOption> mapper)
+    public <O extends Option<?>> O flatMap(
+        final Function<? super Float, ? extends O> mapper)
     {
         return mapper.apply(boxedValue());
     }
 
     @Override
-    public <A> BooleanOption flatMapToBoolean(
-        final BiFunction<? super A, ? super Float, ? extends BooleanOption> mapper,
+    public <A, O extends Option<?>> O flatMap(
+        final BiFunction<? super A, ? super Float, ? extends O> mapper,
         final A arg)
     {
         return mapper.apply(arg, boxedValue());
     }
 
     @Override
-    public ByteOption flatMapToByte(
-        final Function<? super Float, ? extends ByteOption> mapper)
+    public <O extends Option<?>> O flatMapFloat(
+        final FloatFunction<? extends O> mapper)
     {
-        return mapper.apply(boxedValue());
-    }
-
-    @Override
-    public <A> ByteOption flatMapToByte(
-        final BiFunction<? super A, ? super Float, ? extends ByteOption> mapper,
-        final A arg)
-    {
-        return mapper.apply(arg, boxedValue());
-    }
-
-    @Override
-    public CharOption flatMapToChar(
-        final Function<? super Float, ? extends CharOption> mapper)
-    {
-        return mapper.apply(boxedValue());
-    }
-
-    @Override
-    public <A> CharOption flatMapToChar(
-        final BiFunction<? super A, ? super Float, ? extends CharOption> mapper,
-        final A arg)
-    {
-        return mapper.apply(arg, boxedValue());
-    }
-
-    @Override
-    public DoubleOption flatMapToDouble(
-        final Function<? super Float, ? extends DoubleOption> mapper)
-    {
-        return mapper.apply(boxedValue());
-    }
-
-    @Override
-    public <A> DoubleOption flatMapToDouble(
-        final BiFunction<? super A, ? super Float, ? extends DoubleOption> mapper,
-        final A arg)
-    {
-        return mapper.apply(arg, boxedValue());
-    }
-
-    @Override
-    public FloatOption flatMapToFloat(
-        final Function<? super Float, ? extends FloatOption> mapper)
-    {
-        return mapper.apply(boxedValue());
-    }
-
-    @Override
-    public <A> FloatOption flatMapToFloat(
-        final BiFunction<? super A, ? super Float, ? extends FloatOption> mapper,
-        final A arg)
-    {
-        return mapper.apply(arg, boxedValue());
-    }
-
-    @Override
-    public IntOption flatMapToInt(
-        final Function<? super Float, ? extends IntOption> mapper)
-    {
-        return mapper.apply(boxedValue());
-    }
-
-    @Override
-    public <A> IntOption flatMapToInt(
-        final BiFunction<? super A, ? super Float, ? extends IntOption> mapper,
-        final A arg)
-    {
-        return mapper.apply(arg, boxedValue());
-    }
-
-    @Override
-    public LongOption flatMapToLong(
-        final Function<? super Float, ? extends LongOption> mapper)
-    {
-        return mapper.apply(boxedValue());
-    }
-
-    @Override
-    public <A> LongOption flatMapToLong(
-        final BiFunction<? super A, ? super Float, ? extends LongOption> mapper,
-        final A arg)
-    {
-        return mapper.apply(arg, boxedValue());
-    }
-
-    @Override
-    public ShortOption flatMapToShort(
-        final Function<? super Float, ? extends ShortOption> mapper)
-    {
-        return mapper.apply(boxedValue());
-    }
-
-    @Override
-    public <A> ShortOption flatMapToShort(
-        final BiFunction<? super A, ? super Float, ? extends ShortOption> mapper,
-        final A arg)
-    {
-        return mapper.apply(arg, boxedValue());
+        return mapper.apply(value);
     }
 
     @Override
