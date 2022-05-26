@@ -33,6 +33,7 @@ import java.util.function.*;
 import java.util.stream.Stream;
 import me.dkleszyk.java.function.extra.primitive.*;
 
+import static me.dkleszyk.java.option.Options.noneChecked;
 import static me.dkleszyk.java.option.Options.noneUnchecked;
 import static me.dkleszyk.java.option.Options.someNonNull;
 import static me.dkleszyk.java.option.Options.someNull;
@@ -288,13 +289,27 @@ public interface Option<T>
     /**
      * Returns an option that does not contain a value.
      *
-     * @param <T> The option type.
+     * @param <T> The value type of the option.
      *
      * @return The empty option.
      */
     static <T> Option<T> none()
     {
         return noneUnchecked();
+    }
+
+    /**
+     * Returns an option that does not contain a value.
+     *
+     * @param <O>        The type of the option.
+     * @param optionType An option type.
+     *
+     * @return The empty option.
+     */
+    static <O extends Option<?>> O none(
+        final Class<O> optionType)
+    {
+        return noneChecked(Objects.requireNonNull(optionType));
     }
 
     /**
