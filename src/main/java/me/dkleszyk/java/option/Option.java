@@ -593,124 +593,28 @@ public interface Option<T>
      * Returns the specified option if this instance is non-empty; otherwise
      * returns an empty option.
      *
-     * @param <U>    The value type of the returned option.
+     * @param <O>    The type of the returned option.
      * @param option The option to return if this instance is non-empty.
      *
      * @return {@code option} if this instance is non-empty; otherwise, an empty
      *         option.
      */
-    <U> Option<U> and(
-        final Option<U> option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    BooleanOption and(
-        final BooleanOption option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    ByteOption and(
-        final ByteOption option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    CharOption and(
-        final CharOption option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    DoubleOption and(
-        final DoubleOption option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    FloatOption and(
-        final FloatOption option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    IntOption and(
-        final IntOption option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    LongOption and(
-        final LongOption option);
-
-    /**
-     * Returns the specified option if this instance is non-empty; otherwise
-     * returns an empty option.
-     *
-     * @param option The option to return if this instance is non-empty.
-     *
-     * @return {@code option} if this instance is non-empty; otherwise, an empty
-     *         option.
-     */
-    ShortOption and(
-        final ShortOption option);
+    <O extends Option<?>> O and(
+        final O option);
 
     /**
      * Returns the option supplied by the specified method if this instance is
      * non-empty; otherwise returns an empty option.
      *
-     * @param <U>      The value type of the returned option.
+     * @param <O>      The type of the returned option.
      * @param supplier A method that supplies the option to return if this
      *                 instance is non-empty.
      *
      * @return The option supplied by {@code supplier} if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    <U> Option<U> andGet(
-        final Supplier<? extends Option<? extends U>> supplier);
+    <O extends Option<?>> O andGet(
+        final Supplier<? extends O> supplier);
 
     /**
      * Returns the option supplied by the specified method if this instance is
@@ -718,7 +622,7 @@ public interface Option<T>
      *
      * @param <A>      The type of the additional argument provided to
      *                 {@code supplier}.
-     * @param <U>      The value type of the returned option.
+     * @param <O>      The type of the returned option.
      * @param supplier A method that supplies the option to return if this
      *                 instance is non-empty.
      * @param arg      An additional argument to provide to {@code supplier}.
@@ -726,248 +630,8 @@ public interface Option<T>
      * @return The option supplied by {@code supplier} if this instance is
      *         non-empty; otherwise, an empty option.
      */
-    <A, U> Option<U> andGet(
-        final Function<? super A, ? extends Option<? extends U>> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    BooleanOption andGetBoolean(
-        final Supplier<? extends BooleanOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> BooleanOption andGetBoolean(
-        final Function<? super A, ? extends BooleanOption> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ByteOption andGetByte(
-        final Supplier<? extends ByteOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> ByteOption andGetByte(
-        final Function<? super A, ? extends ByteOption> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    CharOption andGetChar(
-        final Supplier<? extends CharOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> CharOption andGetChar(
-        final Function<? super A, ? extends CharOption> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    DoubleOption andGetDouble(
-        final Supplier<? extends DoubleOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> DoubleOption andGetDouble(
-        final Function<? super A, ? extends DoubleOption> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    FloatOption andGetFloat(
-        final Supplier<? extends FloatOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> FloatOption andGetFloat(
-        final Function<? super A, ? extends FloatOption> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    IntOption andGetInt(
-        final Supplier<? extends IntOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> IntOption andGetInt(
-        final Function<? super A, ? extends IntOption> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    LongOption andGetLong(
-        final Supplier<? extends LongOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> LongOption andGetLong(
-        final Function<? super A, ? extends LongOption> supplier,
-        final A arg);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    ShortOption andGetShort(
-        final Supplier<? extends ShortOption> supplier);
-
-    /**
-     * Returns the option supplied by the specified method if this instance is
-     * non-empty; otherwise returns an empty option.
-     *
-     * @param <A>      The type of the additional argument provided to
-     *                 {@code supplier}.
-     * @param supplier A method that supplies the option to return if this
-     *                 instance is non-empty.
-     * @param arg      An additional argument to provide to {@code supplier}.
-     *
-     * @return The option supplied by {@code supplier} if this instance is
-     *         non-empty; otherwise, an empty option.
-     */
-    <A> ShortOption andGetShort(
-        final Function<? super A, ? extends ShortOption> supplier,
+    <A, O extends Option<?>> O andGet(
+        final Function<? super A, ? extends O> supplier,
         final A arg);
 
     /**

@@ -56,198 +56,22 @@ final class None<T>
     }
 
     @Override
-    public <U> Option<U> and(
-        final Option<U> option)
+    public <O extends Option<?>> O and(
+        final O option)
     {
         return noneUnchecked();
     }
 
     @Override
-    public BooleanOption and(
-        final BooleanOption option)
+    public <O extends Option<?>> O andGet(
+        final Supplier<? extends O> supplier)
     {
         return noneUnchecked();
     }
 
     @Override
-    public ByteOption and(
-        final ByteOption option)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public CharOption and(
-        final CharOption option)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public DoubleOption and(
-        final DoubleOption option)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public FloatOption and(
-        final FloatOption option)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public IntOption and(
-        final IntOption option)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public LongOption and(
-        final LongOption option)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public ShortOption and(
-        final ShortOption option)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <U> Option<U> andGet(
-        final Supplier<? extends Option<? extends U>> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A, U> Option<U> andGet(
-        final Function<? super A, ? extends Option<? extends U>> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public BooleanOption andGetBoolean(
-        final Supplier<? extends BooleanOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> BooleanOption andGetBoolean(
-        final Function<? super A, ? extends BooleanOption> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public ByteOption andGetByte(
-        final Supplier<? extends ByteOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> ByteOption andGetByte(
-        final Function<? super A, ? extends ByteOption> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public CharOption andGetChar(
-        final Supplier<? extends CharOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> CharOption andGetChar(
-        final Function<? super A, ? extends CharOption> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public DoubleOption andGetDouble(
-        final Supplier<? extends DoubleOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> DoubleOption andGetDouble(
-        final Function<? super A, ? extends DoubleOption> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public FloatOption andGetFloat(
-        final Supplier<? extends FloatOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> FloatOption andGetFloat(
-        final Function<? super A, ? extends FloatOption> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public IntOption andGetInt(
-        final Supplier<? extends IntOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> IntOption andGetInt(
-        final Function<? super A, ? extends IntOption> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public LongOption andGetLong(
-        final Supplier<? extends LongOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> LongOption andGetLong(
-        final Function<? super A, ? extends LongOption> supplier,
-        final A arg)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public ShortOption andGetShort(
-        final Supplier<? extends ShortOption> supplier)
-    {
-        return noneUnchecked();
-    }
-
-    @Override
-    public <A> ShortOption andGetShort(
-        final Function<? super A, ? extends ShortOption> supplier,
+    public <A, O extends Option<?>> O andGet(
+        final Function<? super A, ? extends O> supplier,
         final A arg)
     {
         return noneUnchecked();
