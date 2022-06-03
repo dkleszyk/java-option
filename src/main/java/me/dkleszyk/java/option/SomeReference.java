@@ -191,12 +191,6 @@ final class SomeReference<T>
     }
 
     @Override
-    public T get()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return value.hashCode();

@@ -237,18 +237,6 @@ final class SomeLong
     }
 
     @Override
-    public Long get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public long getAsLong()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Long.hashCode(value);

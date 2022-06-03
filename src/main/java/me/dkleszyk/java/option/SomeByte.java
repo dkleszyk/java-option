@@ -256,18 +256,6 @@ final class SomeByte
     }
 
     @Override
-    public Byte get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public byte getAsByte()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Byte.hashCode(value);

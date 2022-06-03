@@ -34,7 +34,7 @@ An alternative to `java.util.Optional`.
 
 ## `map`
 
-    assert Option.some(0).mapInt(i -> i == 0 ? null : (Integer) i).get() == null;
+    assert Option.some(0).mapInt(i -> i == 0 ? null : (Integer) i).orElseThrow() == null;
 
 ## `filterToType`
 
@@ -48,8 +48,8 @@ An alternative to `java.util.Optional`.
 
 ## Interop with `Optional`
 
-    assert Option.some(123).toOptionalInt().getAsInt() == 123;
-    assert Option.from(Optional.of("ABC")).get().equals("ABC");
+    assert Option.some(123).toOptionalInt().orElseThrow() == 123;
+    assert Option.from(Optional.of("ABC")).orElseThrow().equals("ABC");
 
 # Comparison with `Optional`
 
@@ -73,7 +73,7 @@ An alternative to `java.util.Optional`.
 | 'and' with lazy option                |                   |    `andGet`    |
 | 'or' with option                      |                   |      `or`      |
 | 'or' with lazy option                 |       `or`        |    `orGet`     |
-| get value                             |       `get`       |     `get`      |
+| get value                             |       `get`       |                |
 | get value or default value            |     `orElse`      |   `orElse`     |
 | get value or lazy default value       |    `orElseGet`    |  `orElseGet`   |
 | get value or throw                    |   `orElseThrow`   | `orElseThrow`  |

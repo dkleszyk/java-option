@@ -263,18 +263,6 @@ final class SomeBoolean
     }
 
     @Override
-    public Boolean get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public boolean getAsBoolean()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Boolean.hashCode(value);

@@ -794,16 +794,6 @@ public interface Option<T>
         final A arg);
 
     /**
-     * Returns the value contained by this instance.
-     *
-     * @return The value contained by this instance.
-     *
-     * @throws NoSuchElementException This instance is empty.
-     */
-    T get()
-        throws NoSuchElementException;
-
-    /**
      * Executes the specified method if this instance is empty.
      *
      * @param ifNone A method to execute if this instance is empty.

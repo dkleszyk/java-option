@@ -167,16 +167,6 @@ public interface CharOption
         final CharFunction<? extends O> mapper);
 
     /**
-     * Returns the value contained by this instance.
-     *
-     * @return The value contained by this instance.
-     *
-     * @throws NoSuchElementException This instance is empty.
-     */
-    char getAsChar()
-        throws NoSuchElementException;
-
-    /**
      * Executes the specified method if this instance is non-empty.
      *
      * @param ifSome A method to execute if this instance is non-empty.

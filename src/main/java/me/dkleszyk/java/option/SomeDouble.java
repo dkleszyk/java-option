@@ -286,18 +286,6 @@ final class SomeDouble
     }
 
     @Override
-    public Double get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public double getAsDouble()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Double.hashCode(value);

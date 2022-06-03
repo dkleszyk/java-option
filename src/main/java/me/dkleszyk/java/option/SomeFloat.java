@@ -278,18 +278,6 @@ final class SomeFloat
     }
 
     @Override
-    public Float get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public float getAsFloat()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Float.hashCode(value);

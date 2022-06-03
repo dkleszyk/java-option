@@ -175,12 +175,6 @@ final class SomeNull<T>
     }
 
     @Override
-    public T get()
-    {
-        return value();
-    }
-
-    @Override
     public int hashCode()
     {
         return -1;

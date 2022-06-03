@@ -235,18 +235,6 @@ final class SomeShort
     }
 
     @Override
-    public Short get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public short getAsShort()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Short.hashCode(value);

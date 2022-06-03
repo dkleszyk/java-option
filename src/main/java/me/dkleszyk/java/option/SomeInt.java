@@ -237,18 +237,6 @@ final class SomeInt
     }
 
     @Override
-    public Integer get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public int getAsInt()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Integer.hashCode(value);

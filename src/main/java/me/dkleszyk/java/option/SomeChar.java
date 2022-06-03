@@ -278,18 +278,6 @@ final class SomeChar
     }
 
     @Override
-    public Character get()
-    {
-        return boxedValue();
-    }
-
-    @Override
-    public char getAsChar()
-    {
-        return value;
-    }
-
-    @Override
     public int hashCode()
     {
         return Character.hashCode(value);

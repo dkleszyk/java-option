@@ -363,7 +363,7 @@ for origdecl, origsig in methods:
         while True:
             argc = len(declarglist)
             if argc == 0:
-                if declname.startswith("get") or declname.endswith("ElseThrow"):
+                if declname.endswith("ElseThrow"):
                     method += [
                         "    .code stack 1 locals 1 ",
                         "L0:     invokestatic Method me/dkleszyk/java/option/Exceptions optionNoValue ()Ljava/lang/RuntimeException; ",

@@ -176,12 +176,6 @@ final class None<T>
     }
 
     @Override
-    public T get()
-    {
-        throw Exceptions.optionNoValue();
-    }
-
-    @Override
     public int hashCode()
     {
         return 0;
