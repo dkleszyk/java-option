@@ -807,8 +807,14 @@ final class SomeDouble
 
     private static final class Cache
     {
+        private static final long CANONICAL_NAN_BITS =
+            Double.doubleToRawLongBits(Double.NaN);
+
         private static final SomeDouble NEGATIVE_INFINITY =
             new SomeDouble(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+
+        private static final SomeDouble NEGATIVE_ZERO =
+            new SomeDouble(-0.0d, -0.0d);
 
         private static final SomeDouble NaN =
             new SomeDouble(Double.NaN, Double.NaN);
@@ -816,23 +822,41 @@ final class SomeDouble
         private static final SomeDouble POSITIVE_INFINITY =
             new SomeDouble(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 
+        private static final SomeDouble POSITIVE_ZERO =
+            new SomeDouble(+0.0d, +0.0d);
+
         public static final SomeDouble get(
             final double value)
         {
-            if (Double.isNaN(value))
+            final long bits = Double.doubleToRawLongBits(value);
+            return switch ((int) ((bits >> 51) & 0x1fffL))
             {
-                return NaN;
-            }
-
-            return value < 0.0d ?
-                NEGATIVE_INFINITY :
-                POSITIVE_INFINITY;
+                case 0x0000 ->
+                    POSITIVE_ZERO;
+                case 0x0ffe ->
+                    POSITIVE_INFINITY;
+                case 0x0fff ->
+                    NaN;
+                case 0x1000 ->
+                    NEGATIVE_ZERO;
+                case 0x1ffe ->
+                    NEGATIVE_INFINITY;
+                default ->
+                    throw new AssertionError(bits);
+            };
         }
 
         public static final boolean isCached(
             final double value)
         {
-            return !Double.isFinite(value);
+            // We only cache the canonical NaN (0x7ff8000000000000L)
+            // because IEEE 754 is lax about what goes on in the
+            // mantissa bits for NaNs, and we don't want to transmute
+            // all NaNs into a single cached value in case applications
+            // are doing something funky with those other bits
+            return value == 0.0d || // (handles both +0.0 and -0.0)
+                Double.isInfinite(value) ||
+                Double.doubleToRawLongBits(value) == CANONICAL_NAN_BITS;
         }
     }
 }

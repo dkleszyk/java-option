@@ -793,31 +793,56 @@ final class SomeFloat
 
     private static final class Cache
     {
+        private static final int CANONICAL_NAN_BITS =
+            Float.floatToRawIntBits(Float.NaN);
+
         private static final SomeFloat NEGATIVE_INFINITY =
             new SomeFloat(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
 
-        private static final SomeFloat NaN = new SomeFloat(Float.NaN, Float.NaN);
+        private static final SomeFloat NEGATIVE_ZERO =
+            new SomeFloat(-0.0f, -0.0f);
+
+        private static final SomeFloat NaN =
+            new SomeFloat(Float.NaN, Float.NaN);
 
         private static final SomeFloat POSITIVE_INFINITY =
             new SomeFloat(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
 
+        private static final SomeFloat POSITIVE_ZERO =
+            new SomeFloat(+0.0f, +0.0f);
+
         public static final SomeFloat get(
             final float value)
         {
-            if (Float.isNaN(value))
+            final int bits = Float.floatToRawIntBits(value);
+            return switch ((bits >> 22) & 0x3ff)
             {
-                return NaN;
-            }
-
-            return value < 0.0f ?
-                NEGATIVE_INFINITY :
-                POSITIVE_INFINITY;
+                case 0x000 ->
+                    POSITIVE_ZERO;
+                case 0x1fe ->
+                    POSITIVE_INFINITY;
+                case 0x1ff ->
+                    NaN;
+                case 0x200 ->
+                    NEGATIVE_ZERO;
+                case 0x3fe ->
+                    NEGATIVE_INFINITY;
+                default ->
+                    throw new AssertionError(bits);
+            };
         }
 
         public static final boolean isCached(
             final float value)
         {
-            return !Float.isFinite(value);
+            // We only cache the canonical NaN (0x7fc00000) because IEEE 754
+            // is lax about what goes on in the mantissa bits for NaNs,
+            // and we don't want to transmute all NaNs into a single
+            // cached value in case applications are doing something funky
+            // with those other bits
+            return value == 0.0f || // (handles both +0.0 and -0.0)
+                Float.isInfinite(value) ||
+                Float.floatToRawIntBits(value) == CANONICAL_NAN_BITS;
         }
     }
 }
