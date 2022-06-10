@@ -793,8 +793,7 @@ final class SomeFloat
 
     private static final class Cache
     {
-        private static final int CANONICAL_NAN_BITS =
-            Float.floatToRawIntBits(Float.NaN);
+        private static final int CANONICAL_NAN_BITS = 0x7fc00000;
 
         private static final SomeFloat NEGATIVE_INFINITY =
             new SomeFloat(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);

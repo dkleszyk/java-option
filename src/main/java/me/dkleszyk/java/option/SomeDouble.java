@@ -807,8 +807,7 @@ final class SomeDouble
 
     private static final class Cache
     {
-        private static final long CANONICAL_NAN_BITS =
-            Double.doubleToRawLongBits(Double.NaN);
+        private static final long CANONICAL_NAN_BITS = 0x7ff8000000000000L;
 
         private static final SomeDouble NEGATIVE_INFINITY =
             new SomeDouble(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
